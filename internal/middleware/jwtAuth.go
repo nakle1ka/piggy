@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/nakle1ka/piggy/internal/pkg/auth"
 )
 
@@ -25,7 +26,13 @@ func JWTAuth(tm auth.TokenManager) gin.HandlerFunc {
 			return
 		}
 
-		c.Set(UserIdKey, claims.Subject)
+		userId, err := uuid.Parse(claims.Subject)
+		if err != nil {
+			c.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
+
+		c.Set(UserIdKey, userId)
 		c.Next()
 	}
 }

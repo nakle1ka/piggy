@@ -19,6 +19,7 @@ type PiggyHandler struct {
 func (h *PiggyHandler) GetMyPiggies(c *gin.Context) {
 	userId, ok := getUserId(c)
 	if !ok {
+		c.Status(http.StatusUnauthorized)
 		return
 	}
 
@@ -48,10 +49,14 @@ func (h *PiggyHandler) GetMyPiggies(c *gin.Context) {
 func (h *PiggyHandler) GetPiggyById(c *gin.Context) {
 	userId, ok := getUserId(c)
 	if !ok {
+		c.Status(http.StatusUnauthorized)
 		return
 	}
 	piggyId, ok := getPiggyId(c)
 	if !ok {
+		c.JSON(http.StatusBadRequest, ErrorResponse{
+			Error: "invalid piggy id",
+		})
 		return
 	}
 	log := slog.With("user_id", userId, "piggy_id", piggyId)
@@ -73,6 +78,7 @@ func (h *PiggyHandler) GetPiggyById(c *gin.Context) {
 func (h *PiggyHandler) CreatePiggy(c *gin.Context) {
 	userId, ok := getUserId(c)
 	if !ok {
+		c.Status(http.StatusUnauthorized)
 		return
 	}
 	log := slog.With("user_id", userId)
@@ -102,10 +108,14 @@ func (h *PiggyHandler) CreatePiggy(c *gin.Context) {
 func (h *PiggyHandler) UpdatePiggy(c *gin.Context) {
 	userId, ok := getUserId(c)
 	if !ok {
+		c.Status(http.StatusUnauthorized)
 		return
 	}
 	piggyId, ok := getPiggyId(c)
 	if !ok {
+		c.JSON(http.StatusBadRequest, ErrorResponse{
+			Error: "invalid piggy id",
+		})
 		return
 	}
 	log := slog.With("user_id", userId, "piggy_id", piggyId)
@@ -134,10 +144,14 @@ func (h *PiggyHandler) UpdatePiggy(c *gin.Context) {
 func (h *PiggyHandler) DeletePiggy(c *gin.Context) {
 	userId, ok := getUserId(c)
 	if !ok {
+		c.Status(http.StatusUnauthorized)
 		return
 	}
 	piggyId, ok := getPiggyId(c)
 	if !ok {
+		c.JSON(http.StatusBadRequest, ErrorResponse{
+			Error: "invalid piggy id",
+		})
 		return
 	}
 	log := slog.With("user_id", userId, "piggy_id", piggyId)
@@ -159,10 +173,14 @@ func (h *PiggyHandler) DeletePiggy(c *gin.Context) {
 func (h *PiggyHandler) Deposit(c *gin.Context) {
 	userId, ok := getUserId(c)
 	if !ok {
+		c.Status(http.StatusUnauthorized)
 		return
 	}
 	piggyId, ok := getPiggyId(c)
 	if !ok {
+		c.JSON(http.StatusBadRequest, ErrorResponse{
+			Error: "invalid piggy id",
+		})
 		return
 	}
 	log := slog.With("user_id", userId, "piggy_id", piggyId)
@@ -194,10 +212,14 @@ func (h *PiggyHandler) Deposit(c *gin.Context) {
 func (h *PiggyHandler) Withdrawal(c *gin.Context) {
 	userId, ok := getUserId(c)
 	if !ok {
+		c.Status(http.StatusUnauthorized)
 		return
 	}
 	piggyId, ok := getPiggyId(c)
 	if !ok {
+		c.JSON(http.StatusBadRequest, ErrorResponse{
+			Error: "invalid piggy id",
+		})
 		return
 	}
 	log := slog.With("user_id", userId, "piggy_id", piggyId)

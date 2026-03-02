@@ -71,6 +71,8 @@ func (a *App) Run() error {
 		piggy.DELETE("/:id", piggyHnd.DeletePiggy)
 	}
 
+	protected.GET("/users/me", userHnd.GetMe)
+
 	addr := fmt.Sprintf(":%v", a.cfg.App.Port)
 	return router.Run(addr)
 }

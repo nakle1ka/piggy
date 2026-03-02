@@ -17,6 +17,7 @@ type UserService interface {
 	LoginUser(email, password string) (string, string, error)
 	LogoutUser(refreshToken string) error
 	GetNewAccessToken(refreshToken string) (string, string, error)
+	GetUserById(id uuid.UUID) (*model.User, error)
 
 	GetRefreshExpires() time.Duration
 	GetAccessExpires() time.Duration
@@ -33,6 +34,10 @@ type userService struct {
 
 	refreshExp time.Duration
 	accessExp  time.Duration
+}
+
+func (s *userService) GetUserById(id uuid.UUID) (*model.User, error) {
+	return s.userRepo.GetUserById(id)
 }
 
 func (s *userService) RegisterUser(username, email, password string) (string, string, error) {

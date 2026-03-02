@@ -92,6 +92,28 @@ func (h *UserHandler) Logout(c *gin.Context) {
 	c.Status(http.StatusOK)
 }
 
+func (h *UserHandler) GetMe(c *gin.Context) {
+	userId, ok := getUserId(c)
+	if !ok {
+		c.Status(http.StatusUnauthorized)
+		return
+	}
+
+	user, err := h.service.GetUserById(userId)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			slog.Warn("get me: user not found", slog.Any("err", err))
+			c.JSON(http.StatusNotFound, gin.H{"error": "user not found"})
+		} else {
+			slog.Error("get me: server error", slog.Any("err", err))
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "server error"})
+		}
+		return
+	}
+
+	c.JSON(http.StatusOK, user)
+}
+
 func (h *UserHandler) Refresh(c *gin.Context) {
 	rt, err := c.Cookie("refresh_token")
 	if err != nil {
