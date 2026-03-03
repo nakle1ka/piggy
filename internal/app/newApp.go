@@ -45,7 +45,9 @@ func (a *App) Run() error {
 	userHnd := handler.NewUserHandler(userSrv)
 	piggyHnd := handler.NewPiggyHandler(piggySrv)
 
-	router := gin.Default()
+	router := gin.New()
+	router.Use(gin.Recovery())
+	router.Use(middleware.CORS())
 
 	v1 := router.Group("/api/v1")
 
